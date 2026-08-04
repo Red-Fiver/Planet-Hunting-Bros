@@ -11,17 +11,19 @@ Planet Bros GitHub repository created.
 ## What we did
 - Created GitHub repository.
 - Configured Google Colab.
-- Agreed project structure.
-- Defined the long-term mission.
+- Created the project journal.
+- Agreed to build an open, reproducible exoplanet search project.
 
 ## What we learned
-Every scientific project starts with good organisation.
+Every scientific project starts with careful preparation.
 
 ## Next step
-Mission 001 - Recover our first known exoplanet from TESS data.
+Mission 001 - First Light
+Recover our first known exoplanet from public TESS data.
 
 ---
 
-# PB-0002
+## Why this matters
+Today Planet Hunting Bros became a real scientific project rather than just an idea.
 
 (Date to be completed...)
