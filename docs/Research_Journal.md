@@ -66,7 +66,7 @@ Plot improved versions of the data.
 Begin examining real transit-like features.
 Mission Status: ✅ PB-0002 — First Light complete.
 
-**PB-0002 – Survey Pipeline Complete**
+**PB-0003 – Survey Pipeline Complete**
 Date: 7 August 2026
 
 **Objective**
@@ -94,7 +94,7 @@ Before bed he asked:
 This naturally leads towards future work on multi-planet systems.
 
 **Next session**
-PB-0003 – Detector Evaluation
+PB-0004 – Detector Evaluation
 Objectives:
 Build a scientific scorecard.
 Calculate:
