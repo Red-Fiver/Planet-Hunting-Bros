@@ -65,3 +65,42 @@ Understand how astronomers identify transit signals.
 Plot improved versions of the data.
 Begin examining real transit-like features.
 Mission Status: ✅ PB-0002 — First Light complete.
+
+**PB-0002 – Survey Pipeline Complete**
+Date: 7 August 2026
+
+**Objective**
+Expand the Planet-Hunting Bros project from analysing a single artificial light curve to conducting an automated survey of 100 simulated stars.
+
+**Work completed**
+Successfully generated artificial stellar light curves with realistic random noise.
+Randomly inserted planetary transits into approximately half of the simulated stars.
+Improved the transit detector from identifying a single low point to recognising a sustained sequence of low-brightness measurements.
+Measured transit start time, end time and duration.
+Built an automated survey capable of analysing 100 stars.
+Recorded the hidden ground truth (planet_truth) and compared it against the detector's results.
+Achieved 100% accuracy in the initial simulated environment.
+Investigated and resolved several notebook issues, including runtime resets, variable persistence, execution order and NameError exceptions.
+
+**Scientific observations**
+The detector currently performs perfectly because the simulated universe closely matches the assumptions built into the algorithm.
+The next stage is to evaluate the detector using a more detailed scientific scorecard (true positives, false positives, true negatives and false negatives) before making the simulated observations progressively more realistic.
+
+**Memorable moments**
+Jake became fascinated by the randomly generated light curves and began identifying which stars contained planets.
+He nicknamed broad transit events "Jupiters".
+Before bed he asked:
+"What if there were two dips?"
+This naturally leads towards future work on multi-planet systems.
+
+**Next session**
+PB-0003 – Detector Evaluation
+Objectives:
+Build a scientific scorecard.
+Calculate:
+True Positives
+False Positives
+True Negatives
+False Negatives
+Introduce more challenging simulated observations.
+Continue preparing the pipeline for analysis of genuine NASA TESS light curves.
