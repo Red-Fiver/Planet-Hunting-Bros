@@ -462,3 +462,359 @@ This allows development to resume from Gate 4 without requiring the computationa
 - Checkpoint: **saved and reload verified**
 
 **Next session: Gate 4 — interrogate the remaining 12 false positives.**
+
+
+# PB-0005 — Gate 4: Reality Check, Robustness & Blind Validation
+**Date:** 14 August 2026
+
+## Objective
+
+Continue development of the Planet Hunting Bros detector by investigating whether
+additional measurements could distinguish genuine simulated planets from the
+false positives that survived Gates 1–3.
+
+The priority remained conservative:
+
+**Reject useful numbers of false positives without unnecessarily rejecting
+genuine planets.**
+
+---
+
+## Starting Population
+
+The existing PB-0004 control population was used.
+
+After Gates 1–3:
+
+- Genuine planets available for testing: **495**
+- Surviving false positives / impostors: **12**
+
+Gate 4 was deliberately investigated separately rather than immediately adding
+another hard rejection rule to the detector.
+
+---
+
+## Gate 4 — Coherence Reconnaissance
+
+Transit coherence was compared between the genuine planets and the 12 surviving
+impostors.
+
+### Genuine planets
+
+- Median coherence: **0.9623**
+- Range: **0.6833 – 1.0000**
+
+### Impostors
+
+- Median coherence: **0.8058**
+- Range: **0.683 – 0.887**
+
+The distributions showed useful separation, although there was overlap.
+
+A threshold battlefield was therefore performed to determine how many impostors
+could be rejected at different acceptable levels of genuine-planet loss.
+
+### Coherence battlefield
+
+- Allow 0 planets lost:
+  - Reject **1/12 impostors**
+  - Keep **495/495 planets**
+  - Threshold: coherence < **0.683**
+
+- Allow ≤2 planets lost:
+  - Reject **4/12 impostors**
+  - Keep **493/495 planets**
+  - Threshold: coherence < **0.777**
+
+- Allow ≤5 planets lost:
+  - Reject **6/12 impostors**
+  - Keep **490/495 planets**
+  - Threshold: coherence < **0.799**
+
+Conclusion:
+
+**Coherence contained genuine discriminatory information, but was not sufficiently
+powerful by itself to form an aggressive safe rejection rule.**
+
+---
+
+## Gate 4 — BLS Power Reconnaissance
+
+BLS power was then investigated independently.
+
+### Genuine planets
+
+- Median BLS power: approximately **9.06 × 10⁻⁵**
+- Range: approximately **2.00 × 10⁻⁵ – 3.35 × 10⁻⁴**
+
+### Impostors
+
+- Median BLS power: approximately **2.30 × 10⁻⁵**
+- Range: approximately **2.07 × 10⁻⁵ – 3.34 × 10⁻⁵**
+
+The impostors clustered strongly at the low-power end of the genuine-planet
+distribution.
+
+However, BLS power alone could not reject any impostors while maintaining
+zero planet loss.
+
+Examples:
+
+- Allow 0 planets lost → **0/12 impostors rejected**
+- Allow ≤2 planets lost → **6/12 rejected**
+- Allow ≤5 planets lost → **7/12 rejected**
+- Allow ≤10 planets lost → **8/12 rejected**
+
+Conclusion:
+
+**Power was informative, but unsafe as a standalone hard veto.**
+
+---
+
+## Gate 4 — The "Double Whammy"
+
+Coherence and BLS power were then combined.
+
+Instead of rejecting an object for having either suspicious characteristic,
+an object was rejected only when it had:
+
+**LOW coherence AND LOW BLS power**
+
+This produced a dramatic improvement.
+
+### Initial combined result
+
+Rule:
+
+**Reject if coherence < 0.825 AND power < 2.3166451 × 10⁻⁵**
+
+Result:
+
+- Impostors rejected: **6/12**
+- Genuine planets retained: **495/495**
+- Genuine planets lost: **0**
+
+More aggressive versions could reject:
+
+- **7/12** impostors with ≤1 planet lost
+- **9/12** impostors with ≤2 planets lost
+- **10/12** impostors with ≤5 planets lost
+- **11/12** impostors with ≤10 planets lost
+
+This was the strongest apparent Gate 4 result so far.
+
+However, rather than accepting the excellent result immediately, the rule was
+stress-tested.
+
+---
+
+## Robustness Stress Test
+
+The initial Double Whammy rule was tested across **5,000 perturbed trials**.
+
+Fixed rule:
+
+- coherence < **0.825**
+- AND power < **2.3166451 × 10⁻⁵**
+
+### Result
+
+Planet losses:
+
+- Median: **1**
+- Mean: **0.919**
+- Worst: **3**
+- Zero-loss trials: **29.4%**
+
+Impostors removed:
+
+- Median: **5/12**
+- Mean: **5.01/12**
+- Range: **2–8/12**
+- Trials removing ≥5 impostors: **68.8%**
+- Trials removing ≥6 impostors: **33.6%**
+
+Conclusion:
+
+The original 6/12, zero-planet-loss result was real for the original population,
+but **was not sufficiently robust to measurement/population perturbation to be
+adopted as a hard rejection criterion**.
+
+This was an important negative result.
+
+---
+
+## Robustness Optimisation
+
+A grid of **100 candidate combined rules** was tested to identify rules achieving
+at least **95% zero-planet-loss trials**.
+
+**29 rules** reached this safety target.
+
+### Best robust-safe rule identified
+
+- coherence < **0.816**
+- AND power < **2.11 × 10⁻⁵**
+
+Performance:
+
+- Zero-planet-loss trials: **95.4%**
+- Mean planets lost: **0.047**
+- Worst planets lost: **2**
+- Median impostors removed: **1/12**
+- Mean impostors removed: **1.33/12**
+- Trials removing ≥3 impostors: **10.6%**
+- Trials removing ≥4 impostors: **1.7%**
+
+Several still more conservative rules produced zero-loss rates approaching
+98%.
+
+This demonstrated the fundamental Gate 4 trade-off:
+
+**High false-positive rejection was possible, but not while maintaining the
+very high level of planet protection required for a discovery-oriented
+detector.**
+
+Gate 4 was therefore reinterpreted primarily as a conservative false-positive
+flag rather than an aggressive execution rule.
+
+---
+
+## Frozen Gate 4 Rule
+
+A deliberately conservative rule was selected and frozen before blind testing:
+
+**FLAG if:**
+
+- coherence < **0.825**
+- AND
+- BLS power < **2.05 × 10⁻⁵**
+
+No further optimisation was permitted after seeing the blind-test results.
+
+---
+
+## Blind Synthetic Validation
+
+A completely fresh synthetic population was generated using a new fixed random
+seed.
+
+Blind population:
+
+- **500 genuine planets**
+- **100 impostors**
+
+The frozen Gate 4 rule was applied before examining the labels.
+
+### Result
+
+Genuine planets:
+
+- Kept: **500/500**
+- Flagged: **0/500**
+- Planet retention: **100.00%**
+
+Impostors:
+
+- Caught: **19/100**
+- Missed: **81/100**
+- Impostor rejection: **19.00%**
+
+### Interpretation
+
+The frozen Gate 4 rule successfully generalised to a fresh synthetic population
+without rejecting a single genuine simulated planet.
+
+The 19% false-positive rejection rate is deliberately modest compared with the
+initial Double Whammy result, but provides useful additional filtering while
+remaining highly conservative.
+
+This test represents **synthetic validation only**.
+
+The blind population was generated from assumed distributions informed by the
+existing simulation framework. It therefore does NOT yet demonstrate equivalent
+performance on real TESS observations.
+
+---
+
+## Gate 4 Status
+
+**PROVISIONALLY VALIDATED — SYNTHETIC**
+
+Frozen rule:
+
+**coherence < 0.825 AND BLS power < 2.05 × 10⁻⁵**
+
+The rule will NOT be further optimised against the PB-0004 synthetic population.
+
+Future changes must be justified by independent evidence rather than improving
+performance against data already examined.
+
+---
+
+## Checkpoint
+
+A final project checkpoint was created:
+
+**PB0004_FINAL_CHECKPOINT.pkl**
+
+The checkpoint contains:
+
+- PB-0004 control populations
+- Gate 4 control objects
+- Frozen Gate 4 thresholds
+- Blind-validation results
+- Project provenance / checkpoint information
+
+The file was successfully uploaded to:
+
+**Google Drive → PlanetHuntingBros → Data**
+
+The previous Gate 3 checkpoint was retained as an earlier recovery point.
+
+---
+
+# Next Step — PB-0005: TESS Reality Check
+
+Synthetic detector development is now sufficiently mature to begin testing
+against real astronomical observations.
+
+The next stage will construct a small independent control sample from real
+TESS data containing approximately 10–20 carefully selected targets, including:
+
+- Confirmed transiting planets
+- Known false positives / eclipsing binaries
+- Stars without known transit detections
+
+The existing detector and frozen Gate 4 rule will be applied without knowledge
+of the target classifications where practical.
+
+Only after scoring will the known classifications be compared with the
+detector output.
+
+The purpose of this stage is NOT to discover a new planet.
+
+The purpose is to answer a more fundamental question:
+
+**Does the detector behaviour developed in simulation survive contact with
+real TESS light curves?**
+
+If it does, the next phase can begin:
+
+**systematic analysis of under-covered TESS targets for genuine new candidates.**
+
+---
+
+## End-of-session status
+
+**Gates 1–3:** Complete  
+**Gate 4:** Developed, stress-tested and frozen  
+**Synthetic blind validation:** Complete  
+**Final PB-0004 checkpoint:** Saved  
+**Next milestone:** Real TESS validation
+
+### Planet Hunting Bros
+
+**The synthetic proving ground is complete.**
+
+**Next: real starlight.** 🔭🪐
