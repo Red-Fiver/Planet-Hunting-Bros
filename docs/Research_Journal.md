@@ -818,3 +818,121 @@ If it does, the next phase can begin:
 **The synthetic proving ground is complete.**
 
 **Next: real starlight.** 🔭🪐
+
+## PB-0006 — TESS Reality Check: TOI-700 Sector 1
+
+**Objective:**  
+Test the Planet Hunting Bros detection and vetting workflow against real TESS photometry, rather than simulated light curves.
+
+**Target:** TOI-700  
+**TESS Sector:** 1
+
+### Method
+
+A Box Least Squares (BLS) search was performed on the cleaned Sector 1 light curve to identify transit-like periodic signals.
+
+Several distinct BLS peaks were recovered. Candidate #5, with a period of approximately **6.898 days**, was selected for detailed investigation.
+
+The candidate was then subjected to a series of increasingly strict vetting tests.
+
+### Gate 1 — BLS Candidate Identification
+
+Candidate #5 was identified at:
+
+- Period: **6.897980 days**
+- BLS depth: approximately **0.001122**
+- Four predicted transit events within the Sector 1 observations
+
+The signal initially appeared sufficiently interesting to investigate further.
+
+### Gate 2 — Individual Event Inspection
+
+The four predicted transit events were examined individually.
+
+Measured depths:
+
+1. **0.000598**
+2. **0.000062**
+3. **0.002181**
+4. **0.000859**
+
+All four predicted epochs showed some downward flux behaviour, but the measured depths varied substantially.
+
+The third event, centred near **TESS time 1340.091**, was dramatically deeper than the others and became a major source of suspicion.
+
+### Gate 3 — Dominant-Event Removal and Depth Consistency
+
+The strong event near **1340.091** was masked and the BLS search repeated.
+
+The original ~6.898-day signal fell to approximately **26.2% of its original BLS power**, demonstrating that the candidate was heavily dependent on this single event.
+
+A depth-consistency test was also performed.
+
+Results:
+
+- Mean measured depth: **0.000925**
+- Depth coefficient of variation: **0.843**
+- Weighted common depth: **0.000737**
+- Chi-square: **12.839**
+- Degrees of freedom: **3**
+- Reduced chi-square: **4.280**
+
+Diagnostic:
+
+**CAUTION — noticeable depth inconsistency.**
+
+This was inconsistent with the behaviour expected from a clean sequence of similar planetary transits.
+
+### Gate 4 — Phase-Folded Shape Test
+
+The complete light curve was folded at the candidate period of approximately **6.898 days**.
+
+A weak depression was visible near the predicted transit centre, but the folded signal was not clean or compelling. The result remained strongly influenced by the unusually deep 1340 event.
+
+Candidate #5 was therefore retained only for further testing rather than accepted as a credible transit signal.
+
+### Gate 5 — Phase Fold Without the 1340 Event
+
+The dominant event centred at **1340.091454** was removed completely and the light curve was folded again at the same candidate period and epoch.
+
+A small residual depression remained near phase zero.
+
+This showed that the original signal was not *entirely* produced by the 1340 event, but the surviving feature was considerably weaker.
+
+### Gate 6 — Residual Dip Significance
+
+The remaining phase-zero depression was quantified after removal of the dominant event.
+
+Results:
+
+- In-transit points: **130**
+- Out-of-transit points: **835**
+- Out-of-transit median flux: **0.999998**
+- In-transit median flux: **0.999510**
+- Residual depth: **0.000488**
+- Depth uncertainty: **0.000234**
+- Significance: **2.09 sigma**
+
+This residual signal is too weak to support a serious transit candidate.
+
+## Conclusion
+
+**Candidate #5 — REJECTED**
+
+The ~6.898-day BLS signal initially resembled a possible repeating transit signature, but detailed vetting showed that it was dominated by a single unusually deep event near TESS time 1340.091.
+
+After that event was removed, the original BLS signal lost approximately three quarters of its power. The remaining folded depression had a significance of only **2.09 sigma**.
+
+PB-0006 therefore successfully demonstrated an important capability of the Planet Hunting Bros workflow:
+
+> A strong-looking BLS peak should not be treated as evidence of a planet until the individual events producing it have survived independent vetting.
+
+This experiment established a useful preliminary vetting sequence:
+
+**BLS detection → individual event inspection → dominant-event removal → depth consistency → phase-fold inspection → residual significance**
+
+### Final status
+
+**REJECTED — likely false-positive / non-coherent transit-like signal.**
+
+The candidate was not a planet detection, but PB-0006 was a successful test of the project's ability to reject an initially convincing signal in real TESS data.
