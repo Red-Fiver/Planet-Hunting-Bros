@@ -936,3 +936,69 @@ This experiment established a useful preliminary vetting sequence:
 **REJECTED — likely false-positive / non-coherent transit-like signal.**
 
 The candidate was not a planet detection, but PB-0006 was a successful test of the project's ability to reject an initially convincing signal in real TESS data.
+
+---
+
+## PB-0006 Continuation — Positive Control Validation (LHS 3844)
+
+**Objective:**  
+Verify that the Planet Hunting Bros workflow can recover a genuine exoplanet signal using a blind search, providing a positive control alongside the rejected TOI-700 Candidate #5.
+
+### Target
+
+- **Star:** LHS 3844
+- **TIC:** 410153553
+- **TESS Sector:** 1
+
+### Blind BLS Recovery
+
+The saved LHS 3844 TESS light curve was searched using Box Least Squares (BLS) without supplying the known planet's orbital period or transit timing.
+
+The blind search independently identified a strong periodic signal with the following parameters:
+
+- **Recovered period:** 0.462822 days
+- **Recovered transit epoch:** 1325.727138
+- **Recovered transit depth:** 0.003910
+- **Usable TESS data points:** 18,275
+
+The BLS periodogram showed a dominant peak at the recovered period together with a series of related harmonic peaks.
+
+### Phase-Fold Test
+
+The light curve was then phase-folded using only the period and epoch recovered by the blind BLS search.
+
+The resulting folded light curve showed a clear, coherent transit centred close to phase zero.
+
+The transit produced an approximately **0.39% decrease in stellar brightness**, consistent with the depth independently recovered by BLS.
+
+Unlike TOI-700 Candidate #5, the signal did not depend upon one unusually deep isolated event. Repeated events aligned when folded at the recovered period, producing a persistent transit-shaped feature.
+
+### PB-0006 Reality Check
+
+The experiment therefore produced two contrasting outcomes:
+
+**TOI-700 Candidate #5**
+
+Initially convincing BLS signal → individual-event inspection → dominant event identified → dominant event removed → signal weakened substantially → residual significance only **2.09 sigma** → **REJECTED**
+
+**LHS 3844**
+
+Known genuine transit signal → blind BLS search → period independently recovered → phase folding → coherent repeated transit → **RECOVERED**
+
+### Conclusion
+
+PB-0006 demonstrated both rejection of a weak transit-like false candidate and blind recovery of a known genuine TESS transit signal.
+
+This is an important validation of the Planet Hunting Bros workflow. The pipeline is not simply rewarding strong-looking BLS peaks, nor is the subsequent vetting procedure automatically destroying transit signals.
+
+Instead, the tests demonstrate the principle that will guide future candidate searches:
+
+> **A candidate should survive because the signal remains coherent under increasingly hostile tests, not because the original detection looked convincing.**
+
+### Final status
+
+**PB-0006 — PASSED**
+
+The reality-check experiment successfully demonstrated preliminary discrimination between a non-coherent transit-like signal and a genuine repeating transit signal in real TESS photometry.
+
+**Next:** expand the positive-control tests to additional known TESS planets before applying the validated workflow to new candidate searches.
