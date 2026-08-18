@@ -1002,3 +1002,27 @@ Instead, the tests demonstrate the principle that will guide future candidate se
 The reality-check experiment successfully demonstrated preliminary discrimination between a non-coherent transit-like signal and a genuine repeating transit signal in real TESS photometry.
 
 **Next:** expand the positive-control tests to additional known TESS planets before applying the validated workflow to new candidate searches.
+
+
+### PB-0007 — Blind Control Batch: Setup / Commissioning
+
+A reusable blind-control workflow was created to test the Planet Hunting Bros detection and vetting pipeline against multiple real TESS datasets without consulting the expected result during analysis.
+
+The initial PB-0007 framework successfully:
+
+- located the four previously downloaded TESS control datasets;
+- loaded a target anonymously;
+- applied a fixed cleaning and detrending procedure;
+- performed a blind BLS search over periods of 0.2–15 days.
+
+During commissioning, the first anonymously selected target produced a strongest BLS solution at **14.818691 days**, with a transit epoch of **1340.093495**.
+
+The recovered epoch was almost identical to the unusually deep event near **TESS time 1340.091** investigated during PB-0006. This indicated that the initial blind-control pool probably included the dataset already examined in PB-0006.
+
+The result was therefore **not treated as a new blind-control result**.
+
+**Methodological decision:** Before PB-0007 continues, the previously investigated PB-0006 dataset will be excluded from the blind pool. A genuinely unused control will then be selected and analysed without consulting its known planetary properties.
+
+**Status:** PB-0007 framework operational; commissioning test excluded from scientific scoring.
+
+**Next:** Begin the first genuine blind control.
