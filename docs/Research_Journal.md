@@ -1026,3 +1026,106 @@ The result was therefore **not treated as a new blind-control result**.
 **Status:** PB-0007 framework operational; commissioning test excluded from scientific scoring.
 
 **Next:** Begin the first genuine blind control.
+
+## PB-0007 — Blind Control #1: Successful Recovery of WASP-18 b
+
+**Date:** 19 August 2026  
+**Experiment:** PB-0007 — Blind Control Batch  
+**Control:** BC-001  
+**TESS Sector:** 2  
+
+### Objective
+
+Test the Planet Hunting Bros detection and vetting workflow against an anonymous real TESS light curve whose identity was deliberately hidden during analysis.
+
+The purpose of the experiment was to determine whether the workflow could recognise and correctly classify a genuine transit signal without prior knowledge of the target or expected planetary parameters.
+
+### Blind Analysis
+
+BC-001 was selected from the control dataset with its target identity hidden.
+
+After quality filtering and preparation, the light curve contained **18,299 usable observations** spanning approximately **27.406 days**.
+
+Visual inspection showed numerous regularly repeating deep flux reductions, but the identity and known classification of the target remained hidden.
+
+A blind Box Least Squares (BLS) search recovered the strongest periodic signal at:
+
+- **Period:** 0.941517 days
+- **Transit duration:** 0.0800 days (~1.92 hours)
+- **BLS depth:** 0.009340 (~0.934%)
+- **BLS power:** 0.066383
+
+The phase-folded light curve produced a clear, coherent and strongly repeated transit-like profile.
+
+### Odd/Even Transit Test
+
+Odd and even events were analysed independently.
+
+- **Odd depth:** 0.009639
+- **Even depth:** 0.010206
+- **Absolute difference:** 0.000566
+- **Fractional difference:** 0.057 (5.7%)
+
+**Result: PASS**
+
+Odd and even transit depths were closely matched, providing no strong evidence for alternating primary and secondary eclipses at the recovered period.
+
+### Individual Transit Consistency
+
+The recovered ephemeris predicted **28 usable individual transit events** within the Sector 2 observations.
+
+Results:
+
+- **Events showing a dip:** 100.0%
+- **Events within 30% of median depth:** 85.7%
+- **Median individual depth:** 0.010160
+- **Mean individual depth:** 0.009554
+- **Depth MAD:** 0.000146
+- **Depth CV:** 0.172
+
+Although several individual events showed shallower measured depths, all 28 predicted events contained a detectable flux reduction.
+
+**Final pre-reveal diagnostic: STRONG PASS**
+
+### Blind Verdict
+
+Before the target identity was revealed, the Planet Hunting Bros verdict was locked as:
+
+**STRONG PLANET CANDIDATE**
+
+Only after this classification had been recorded was the target identity examined.
+
+### Identity Reveal
+
+BC-001 was revealed as:
+
+**TIC 100100827 — WASP-18**
+
+The recovered signal corresponds to the known confirmed transiting exoplanet **WASP-18 b**.
+
+Published values for WASP-18 b give an orbital period of approximately **0.94145 days**, extremely close to the **0.941517-day** period recovered independently by the blind Planet Hunting Bros analysis.
+
+The recovered transit depth of approximately **0.934%** is likewise consistent with the known transit signal.
+
+### Result
+
+**BLIND CONTROL #1 — SUCCESS**
+
+PB-0007 successfully recovered a genuine known planetary transit from anonymous real TESS photometry and classified the signal as a strong planet candidate before the identity of the target was known.
+
+This does **not** constitute an independent discovery or confirmation of WASP-18 b. Instead, it provides an important validation of the developing Planet Hunting Bros workflow: when presented with a real planetary signal without prior knowledge of its identity or expected parameters, the pipeline was capable of detecting the periodicity and producing the correct broad classification.
+
+Further blind controls — including confirmed planets, eclipsing binaries, false positives and apparently quiet stars — will be required before the performance of the workflow can be assessed robustly.
+
+### Milestone
+
+PB-0007 / BC-001 marks the first successful fully blind recovery of a confirmed exoplanet by the Planet Hunting Bros workflow.
+
+**Target identity hidden → signal detected → diagnostics passed → verdict locked → identity revealed.**
+
+**Blind verdict:** STRONG PLANET CANDIDATE  
+**Reality:** CONFIRMED EXOPLANET — WASP-18 b
+
+**Believe — but verify.**
+
+**Verified.**
