@@ -1129,3 +1129,268 @@ PB-0007 / BC-001 marks the first successful fully blind recovery of a confirmed 
 **Believe — but verify.**
 
 **Verified.**
+
+# PB-0007 — Blind Control BC-002: Full Vetting and Successful Identification
+
+**Date:** 21 August 2026  
+**Project:** Planet Hunting Bros  
+**Status:** COMPLETE — BLIND CONTROL PASSED
+
+## Objective
+
+Continue blind-control testing of the Planet Hunting Bros detection and vetting pipeline using BC-002.
+
+The identity of BC-002 was deliberately hidden throughout the analysis. The purpose was to determine whether the PHB pipeline could detect and appropriately vet a genuine transit-like signal without prior knowledge of the target or its known classification.
+
+A blind verdict was locked before revealing the target identity.
+
+---
+
+## Initial Detection
+
+The PHB pipeline identified a strong periodic transit-like signal in BC-002.
+
+Two clearly observed transit events were investigated individually.
+
+Approximate measured depths:
+
+- Transit 1: 0.00232 (~0.232%)
+- Transit 2: 0.00293 (~0.293%)
+
+The two events were broadly consistent in depth and morphology.
+
+A period ambiguity remained between approximately:
+
+- 5.659 days
+- 11.318 days
+
+The expected intermediate event under the shorter-period hypothesis occurred during a TESS data gap, preventing the ambiguity from being resolved from this sector alone.
+
+---
+
+## False-Positive Vetting
+
+### Secondary Eclipse Test
+
+No significant secondary eclipse was detected for the testable short-period hypothesis.
+
+Measured secondary signal:
+
+- ~16 ppm
+- ~0.32 sigma
+
+The longer-period secondary test was untestable because of missing TESS coverage.
+
+Result:
+
+**No detected secondary eclipse capable of rejecting the candidate.**
+
+---
+
+## Odd/Even Transit Test
+
+Only even-parity events were observed because the intervening event fell inside the TESS coverage gap.
+
+The pipeline correctly returned:
+
+**UNTESTABLE**
+
+rather than incorrectly interpreting missing data as an odd/even pass.
+
+---
+
+## Centroid Motion Test
+
+Flux-weighted centroid behaviour was measured independently around both observed transits.
+
+Results:
+
+- Transit 1 shift: ~0.00209 pixels (~0.044 arcsec), 0.37 sigma
+- Transit 2 shift: ~0.00184 pixels (~0.039 arcsec), 0.47 sigma
+
+Result:
+
+**No obvious centroid shift detected.**
+
+---
+
+## Difference Imaging
+
+Independent in-transit and out-of-transit pixel images were constructed for both events.
+
+Initial missing-light centroid estimates showed some positional disagreement:
+
+- Transit 1: (5.970, 4.848)
+- Transit 2: (5.621, 4.826)
+- Initial separation: ~0.350 pixels
+
+This was NOT treated as sufficient evidence to reject the candidate.
+
+---
+
+## Bootstrap Difference-Centroid Test
+
+1,000 bootstrap resamples were performed for each transit to estimate the stability of the difference-image centroids.
+
+The robust bootstrap median positions were separated by only approximately:
+
+**0.135 pixels**
+
+This demonstrated that the apparently large initial transit-to-transit centroid disagreement was substantially affected by measurement uncertainty.
+
+Both transit centroid distributions instead showed a broadly similar positional displacement.
+
+---
+
+## Catalogue and Gaia Investigation
+
+The difference-centroid positions were compared with the catalogue target position.
+
+Both events appeared somewhat displaced from the nominal catalogue coordinate, initially raising a possible contamination concern.
+
+A blind Gaia neighbourhood search was therefore performed.
+
+A bright Gaia source was identified approximately 4–5 arcsec from the nominal catalogue position and close to the inferred missing-light region.
+
+Initially this appeared to be a possible contaminating source.
+
+Further investigation showed that this bright Gaia source was most likely the true Gaia counterpart of BC-002 itself rather than an independent contaminant.
+
+This was an important pipeline lesson: an apparent contaminant must not be assumed to be a separate astrophysical source without first establishing its relationship to the target.
+
+---
+
+## Genuine Neighbour Dilution Test
+
+After removing the likely target Gaia counterpart, the nearest genuine neighbouring source was approximately:
+
+- Separation: ~19.8 arcsec
+- Magnitude difference: ΔG ~+8.74
+
+The neighbour was then tested to determine whether an eclipse occurring on that star could reproduce the observed diluted TESS transit depth.
+
+Required intrinsic eclipse depth:
+
+**~823%**
+
+This is physically impossible.
+
+Result:
+
+**The nearest genuine Gaia neighbour cannot produce the observed signal.**
+
+---
+
+## Target Geometry Test
+
+The nominal catalogue position, Gaia counterpart, measured TPF photocentre and transit missing-light positions were compared.
+
+The bright Gaia source was closer to the actual TPF light photocentre than the nominal catalogue position, supporting its identification as the target counterpart rather than a contaminant.
+
+The missing-light positions were also broadly compatible with this source.
+
+---
+
+## Final Systematics Stress Test
+
+Before revealing BC-002, the difference-centroid analysis was repeated using multiple reasonable analysis choices, including:
+
+- standard transit window
+- tighter transit window
+- wider transit window
+- closer baseline regions
+- mean rather than median difference images
+
+Transit 1 remained spatially robust.
+
+Transit 2 showed greater sensitivity to analysis choices, but the two events remained broadly consistent.
+
+Final robust transit-to-transit centroid separation:
+
+**~0.352 pixels (~7.4 arcsec)**
+
+The pipeline therefore returned a cautious rather than definitive spatial verdict.
+
+---
+
+## Locked Blind Verdict
+
+Before revealing the identity of BC-002, the PHB verdict was recorded as:
+
+**PASS / SURVIVES VETTING**
+
+More specifically:
+
+**Credible on-target transit-like candidate with residual centroid/systematics uncertainty.**
+
+The signal was NOT declared a validated planet.
+
+However, the available evidence did not justify rejecting BC-002 as an obvious eclipsing binary, contaminating neighbour or instrumental false positive.
+
+The blind analysis was then frozen.
+
+---
+
+# Identity Reveal
+
+After all analysis and the blind verdict were locked, the hidden target identity was revealed.
+
+**BC-002 = TIC 259377017**
+
+The target is:
+
+**TOI-270 / L 231-32**
+
+TOI-270 is a known multi-planet system containing three transiting planets.
+
+The blind PHB analysis had therefore independently detected and successfully retained genuine planetary transit signals without knowing that the target was a known planetary system.
+
+---
+
+## Outcome
+
+**BLIND CONTROL SUCCESSFUL**
+
+PB-0007 demonstrated that the developing Planet Hunting Bros pipeline can:
+
+- detect genuine transit-like events
+- interrogate individual events
+- recognise period/coverage degeneracy
+- refuse conclusions when tests are unobservable
+- search for secondary eclipses
+- perform odd/even vetting
+- perform centroid-motion analysis
+- construct difference images
+- bootstrap difference-centroid measurements
+- investigate Gaia contamination
+- perform quantitative dilution tests
+- identify misleading apparent contaminants
+- stress-test results against reasonable analysis choices
+- retain uncertainty rather than forcing binary PASS/FAIL conclusions
+- reach a defensible blind classification before target identity is known
+
+Most importantly, the pipeline did not simply identify a transit and assume "planet".
+
+It repeatedly attempted to falsify the planetary interpretation.
+
+BC-002 survived.
+
+Only then was its identity revealed as the known TOI-270 planetary system.
+
+---
+
+## Key Lesson
+
+PB-0007 reinforced a central Planet Hunting Bros principle:
+
+**A candidate does not survive because we want it to be a planet, and it does not die because one diagnostic looks suspicious. Every conclusion must be earned by the evidence.**
+
+This blind control substantially increased confidence in the methodology while also identifying areas requiring further development, particularly rigorous pixel-level localisation and centroid uncertainty analysis.
+
+The next objective is to repeat blind testing across additional known planets and astrophysical false positives before applying the mature pipeline at scale to neglected TESS targets.
+
+---
+
+**PB-0007 COMPLETE**
+
+✋️*✋️ **Believe — but be critical.**
