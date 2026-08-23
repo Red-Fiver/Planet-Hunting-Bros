@@ -1394,3 +1394,255 @@ The next objective is to repeat blind testing across additional known planets an
 **PB-0007 COMPLETE**
 
 ✋️*✋️ **Believe — but be critical.**
+
+# PB0008 — Synthetic End-to-End Gate Commissioning
+
+**Status:** Completed — commissioning run exposed an experimental-design flaw  
+**Outcome:** Pipeline mechanics commissioned; final scientific classification invalidated  
+**Successor:** PB0009
+
+## Objective
+
+PB0008 was designed as the first extended end-to-end commissioning run of the
+Planet Hunter Bros candidate-vetting pipeline.
+
+A synthetic transit-like candidate was passed sequentially through the developing
+gate architecture, with each gate intended to test a different potential
+false-positive or instrumental explanation.
+
+The principal goals were to:
+
+- verify gate execution and record keeping;
+- commission diagnostic thresholds and reporting;
+- test independence between evidence streams;
+- test the early catalogue-context firewall;
+- test late identity reveal;
+- exercise final evidence synthesis;
+- identify architectural weaknesses before using real TESS targets.
+
+## Synthetic Candidate
+
+The primary science data were generated as a deliberately clean,
+planet-like synthetic transit.
+
+The simulated signal exhibited broadly:
+
+- repeatable transit-like events;
+- approximately stable transit depth;
+- no deliberately injected secondary eclipse;
+- no deliberately injected odd/even depth difference;
+- stable aperture behaviour;
+- target-centred difference-image behaviour;
+- negligible transit-correlated centroid motion;
+- robustness under several reasonable preprocessing variants.
+
+Nearby synthetic sources were also introduced so that contamination and dilution
+diagnostics could be exercised.
+
+## Gate Commissioning
+
+The PB0008 run exercised the developing G01–G16 architecture.
+
+Among the notable results:
+
+- the synthetic transit was successfully detected and characterised;
+- multiple transit-shape and consistency diagnostics passed;
+- aperture-depth stability passed;
+- nearby-source screening passed;
+- dilution feasibility identified neighbouring sources capable of reproducing
+  the observed depth;
+- difference-image localisation nevertheless placed the injected missing light
+  close to the target;
+- centroid behaviour showed no persuasive transit-correlated displacement;
+- the signal survived all tested preprocessing variants.
+
+One particularly useful result was the combination:
+
+**G11 FAIL — dilution physically feasible**
+
+while
+
+**G12 PASS — missing light localised near target**
+
+and
+
+**G13 PASS — no significant centroid shift**
+
+This demonstrated that the gates were capable of retaining apparently conflicting
+pieces of evidence rather than simply cancelling one another or treating the
+pipeline as a PASS/FAIL vote count.
+
+## G03 Firewall Test
+
+PB0008 also commissioned an early masked catalogue-context gate.
+
+To test the firewall, a deliberately secret synthetic identity was created:
+
+- object identity: `SECRET_TEST_OBJECT`
+- private object class: `ECLIPSING_BINARY`
+- private catalogue: `SECRET_TEST_CATALOGUE`
+
+G03 was designed to expose only a masked contextual class while preventing the
+underlying identity and catalogue information from entering the blind science
+workflow.
+
+The firewall itself worked as intended.
+
+During the session, the firewall test was further separated from the main science
+record using a deep copy, and an audit confirmed that the secret identity did not
+leak into the main G01–G14 science record.
+
+## The PB0008 Failure
+
+Despite the firewall functioning correctly, the overall commissioning experiment
+contained a deeper conceptual flaw.
+
+The synthetic photometric candidate was fundamentally **planet-like**, while the
+separate firewall test metadata labelled the synthetic control as an
+**eclipsing binary**.
+
+These represented two different experiments:
+
+1. testing whether the science gates could classify synthetic photometric data;
+2. testing whether catalogue identity could remain hidden until an authorised
+   reveal.
+
+PB0008 inadvertently recombined those experiments at the end of the pipeline.
+
+At G15, the deliberately planted `ECLIPSING_BINARY` identity was legitimately
+revealed from the firewall-control record.
+
+G16 was then explicitly supplied that revealed identity and, according to its
+rules, froze the final classification as:
+
+`KNOWN_NONPLANETARY_OBJECT`
+
+This classification was internally consistent with the information G16 received,
+but it was **not an independent inference from the synthetic science data**.
+
+The pipeline had effectively been given an artificial answer created for a
+different commissioning purpose.
+
+Therefore the final PB0008 astrophysical classification is considered invalid.
+
+## Why This Matters
+
+PB0008 demonstrated an important distinction between:
+
+**information isolation**
+
+and
+
+**experimental blinding**.
+
+The G03 firewall successfully prevented information leakage.
+
+However, successfully hiding an artificial truth until a later gate does not make
+that truth scientifically valid evidence.
+
+A synthetic ground-truth label used to test infrastructure must never subsequently
+participate in the classification of the synthetic candidate.
+
+This issue could easily have produced misleading confidence in the pipeline had it
+not been noticed before real-data validation.
+
+## Final Audit
+
+A structural audit at the end of PB0008 reported:
+
+`PB-0008 FINAL AUDIT: PASS`
+
+with no implementation warnings.
+
+This result should be interpreted narrowly.
+
+It demonstrated that the implemented record separation, gate storage, firewall
+behaviour and final-record freezing were internally consistent.
+
+It did **not** establish that the final astrophysical classification was valid.
+
+The audit itself explicitly noted that commissioning structure does not validate
+astrophysical performance on real TESS data.
+
+## Lessons Learned
+
+PB0008 produced several design rules that will be carried forward.
+
+### 1. Synthetic truth must remain outside the detector
+
+The injected class of a synthetic candidate must never appear inside the candidate
+record, catalogue context, gate evidence or final synthesis.
+
+Ground truth is revealed only after the detector has frozen its classification.
+
+### 2. G03 will be a dummy gate during synthetic commissioning
+
+During synthetic tests, G03 will preserve its position in the architecture but
+perform no catalogue search.
+
+Expected behaviour will be equivalent to:
+
+`SYNTHETIC_MODE / CATALOGUE_NOT_QUERIED`
+
+No hidden identity will exist.
+
+### 3. G15 will not reveal synthetic truth
+
+For synthetic candidates, the catalogue/literature reveal stage will likewise be
+disabled or marked as deferred.
+
+Synthetic ground truth is not catalogue evidence.
+
+### 4. Gates must remain evidentially independent
+
+A FAIL at one gate must not automatically erase a PASS elsewhere, and vice versa.
+
+For example, dilution feasibility and spatial localisation answer different
+questions and both results must survive into final synthesis.
+
+### 5. Failed blind tests must not be tuned against their answers
+
+If a future blinded candidate is misclassified, the failure will be analysed and
+any pipeline revision versioned.
+
+The revised detector will then be tested against newly generated blind cases,
+rather than repeatedly tuning thresholds against the candidate whose truth has
+already been revealed.
+
+## PB0009 Course Correction
+
+PB0009 will repeat synthetic end-to-end commissioning under a substantially
+stronger blinded design.
+
+Three physically coherent synthetic candidates will be generated:
+
+1. a planet-like transit;
+2. an eclipsing-binary false positive;
+3. an off-target contaminating source.
+
+Their identities will be randomly assigned to anonymous candidate records.
+
+Neither the operator nor the PB pipeline will use the hidden truth during
+G01–G16 processing.
+
+Each candidate will be processed independently and its classification frozen.
+
+Only after all three classifications are frozen will the ground-truth mapping be
+revealed and compared with the detector results.
+
+This will provide the first meaningful end-to-end test of whether the pipeline can
+distinguish the three scenarios from their observable evidence alone.
+
+## Conclusion
+
+PB0008 did not provide a valid end-to-end astrophysical classification test.
+
+It did, however, achieve something arguably more useful at this stage of
+development: it exposed a subtle flaw in the experimental architecture before
+the pipeline was trusted on real TESS data.
+
+The run is therefore retained unchanged as a commissioning record rather than
+rewritten or retrospectively corrected.
+
+**PB0008 outcome: implementation commissioning successful; experimental design
+failed; lessons incorporated into PB0009.**
