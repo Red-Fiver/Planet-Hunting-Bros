@@ -1646,3 +1646,322 @@ rewritten or retrospectively corrected.
 
 **PB0008 outcome: implementation commissioning successful; experimental design
 failed; lessons incorporated into PB0009.**
+
+# PB-0009 — Blind Synthetic Gauntlet
+## Status: CLOSED — COMMISSIONING INCOMPLETE
+
+### Objective
+
+PB-0009 was designed as a blinded synthetic end-to-end test of the Planet Hunting Bros candidate-vetting pipeline.
+
+Three anonymous synthetic candidates were generated:
+
+- SYN-A
+- SYN-B
+- SYN-C
+
+Their physical scenarios and ground-truth mapping were sealed at generation time.
+
+The intention was to process all three candidates through the full vetting sequence without consulting the hidden truth, then compare the frozen scientific verdicts against the sealed answers only after completion.
+
+G03 was deliberately converted into a non-evidential dummy placeholder for synthetic testing following the lessons from PB-0008.
+
+---
+
+## Blindness protocol
+
+PB-0009 successfully maintained the intended firewall during the SYN-A run.
+
+- Ground truth remained sealed.
+- G03 performed no catalogue lookup.
+- No hidden physical class was consulted by the science gates.
+- Candidate interpretation proceeded entirely from science-visible synthetic data.
+
+This was a major improvement over PB-0008.
+
+---
+
+## SYN-A results before termination
+
+### G01 — Signal Detection
+**FAIL**
+
+A downward feature was detected, but the G01 detection criterion was not met strongly enough for a formal pass.
+
+This did not terminate the commissioning workflow because PB-0009 was explicitly testing gate behaviour.
+
+### G02 — Basic Light-Curve Quality
+**PASS**
+
+The synthetic light curve had acceptable cadence coverage, scatter, gaps and outlier behaviour.
+
+### G03 — Synthetic Placeholder
+**NOT_EVALUATED**
+
+Catalogue search disabled in synthetic mode.
+
+Ground truth remained sealed.
+
+### G04 — Folded Morphology
+**FAIL**
+
+Supplied period:
+
+**6.213080 d**
+
+A feature was recovered close to phase zero:
+
+- strongest folded depth: ~1502 ppm
+- phase-zero depth: ~1678 ppm
+- strongest dip phase: +0.0063
+- epoch alignment: TRUE
+
+However, the folded-feature significance was only:
+
+**1.66 sigma**
+
+This was below the frozen G04 threshold.
+
+### G05 — Individual-Event Consistency
+**PASS**
+
+Four independently covered events were recovered.
+
+Approximate event depths:
+
+- 2044 ppm
+- 1670 ppm
+- 1592 ppm
+- 2394 ppm
+
+All four usable events were downward.
+
+Median depth:
+
+**1857 ppm**
+
+Relative depth scatter:
+
+**0.181**
+
+The individual-event test therefore provided strong repeatability evidence despite the weak G04 folded-significance result.
+
+### G06 — Period / Alias Sanity
+**PASS**
+
+Trial periods:
+
+- 0.5P = 3.106540 d
+- P = 6.213080 d
+- 2P = 12.426161 d
+
+Combined scores:
+
+- half period: 14.92
+- supplied period: 19.59
+- double period: 12.76
+
+The supplied period remained preferred over the obvious half/double aliases.
+
+### G07 — Odd / Even Consistency
+**PASS**
+
+Usable events:
+
+- odd: 2
+- even: 2
+
+Measured depths:
+
+- odd: 2311.9 ± 133.3 ppm
+- even: 1768.7 ± 139.7 ppm
+
+Difference:
+
+**543.1 ppm**
+
+Significance:
+
+**2.81 sigma**
+
+Depth ratio:
+
+**1.307**
+
+This fell just below the frozen 3-sigma CAUTION threshold.
+
+The result was therefore retained as PASS, while noting the mildly interesting odd/even asymmetry.
+
+### G08 — Secondary-Eclipse Search
+**PASS**
+
+Secondary phase:
+
+**0.5**
+
+Measured secondary depth:
+
+**176.9 ± 229.9 ppm**
+
+Secondary SNR:
+
+**0.77**
+
+Secondary / primary depth ratio:
+
+**0.095**
+
+No statistically persuasive secondary eclipse was detected.
+
+### G09 — Aperture Dependence
+**PASS**
+
+Measured depths:
+
+- SMALL: 1932.7 ± 225.2 ppm
+- STANDARD: 1932.7 ± 197.9 ppm
+- LARGE: 1885.2 ± 160.9 ppm
+
+Fractional depth spread:
+
+**0.025**
+
+The transit depth was therefore extremely stable across the three synthetic apertures.
+
+### G10 — Nearby-Source / Contamination Assessment
+**CAUTION**
+
+Two synthetic nearby sources were present.
+
+N1:
+
+- separation: 30.0 arcsec
+- separation: 1.43 TESS pixels
+- delta magnitude: 2.12
+- classification: CAUTION
+
+N2:
+
+- separation: 64.5 arcsec
+- separation: 3.07 TESS pixels
+- delta magnitude: 3.52
+- classification: CLEAR
+
+N1 therefore warranted contamination scrutiny.
+
+### G11 — Dilution Feasibility
+**FAIL**
+
+Observed transit depth used:
+
+**1932.7 ppm**
+
+Both nearby sources were physically capable of reproducing the observed signal after dilution.
+
+N1:
+
+- maximum observable diluted depth: ~119757 ppm
+- required intrinsic eclipse: **1.61%**
+- capability: STRONG
+
+N2:
+
+- maximum observable diluted depth: ~33194 ppm
+- required intrinsic eclipse: **5.82%**
+- capability: STRONG
+
+G11 therefore correctly concluded that neighbour contamination was physically feasible.
+
+Importantly, this established feasibility only — not localisation.
+
+---
+
+# Commissioning failure discovered at G12
+
+### G12 — Difference-Image Localisation
+**UNTESTABLE**
+
+PB-0009 did not generate or preserve a science-visible three-dimensional pixel cube / target-pixel-file equivalent.
+
+The dataset therefore lacked the information required for genuine difference-image localisation.
+
+Expected data structure:
+
+`(cadence, row, column)`
+
+Because pixel-level evidence had not been frozen at candidate generation time, it was decided that retroactively manufacturing pixel data after seeing SYN-A's earlier gate behaviour would compromise the integrity of the blind experiment.
+
+No synthetic pixel cube was added.
+
+G12 was therefore declared untestable by construction.
+
+---
+
+## Decision
+
+PB-0009 was terminated at G12.
+
+SYN-B and SYN-C were not processed.
+
+They were intentionally left unused because both were generated under the same incomplete evidence architecture and would therefore encounter the same G12 limitation.
+
+Running them through G01-G11 would provide limited additional commissioning value while still requiring a fresh synthetic batch for true end-to-end validation.
+
+---
+
+## What PB-0009 successfully demonstrated
+
+PB-0009 was not a wasted run.
+
+It successfully demonstrated:
+
+- effective separation between ground truth and science-visible evidence
+- a functioning dummy G03 synthetic placeholder
+- independent behaviour of the early photometric gates
+- useful disagreement between folded and event-by-event diagnostics
+- period/alias testing
+- odd/even comparison
+- secondary-eclipse testing
+- aperture-dependence testing
+- nearby-source contamination screening
+- dilution-feasibility testing
+- preservation of uncertainty and UNTESTABLE states rather than forcing verdicts
+
+Most importantly, PB-0009 exposed a genuine architectural omission before real blind-data validation began.
+
+---
+
+## Required change before next full synthetic gauntlet
+
+Any future blind synthetic batch must generate and freeze the complete evidence package before candidate selection.
+
+Minimum required package:
+
+- time-series flux
+- supplied candidate ephemeris
+- aperture-dependent light curves
+- neighbour catalogue
+- synthetic target pixel cube
+- cadence-aligned pixel timestamps
+- spatial source geometry
+- centroid-capable pixel information
+- difference-image-capable transit signal
+- sealed ground-truth mapping
+
+No evidence product should be created or altered after a candidate begins passing through the gates.
+
+---
+
+## Final PB-0009 status
+
+**CLOSED — COMMISSIONING INCOMPLETE**
+
+Reason:
+
+**Synthetic candidates were generated without pixel-level data required for G12 difference-image localisation.**
+
+Ground truth for SYN-A, SYN-B and SYN-C remained sealed at termination.
+
+No final astrophysical classification was issued.
+
+PB-0009 is retained as a commissioning record and architecture-correction milestone rather than a completed validation run.
