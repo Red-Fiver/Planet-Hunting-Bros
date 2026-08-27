@@ -1965,3 +1965,419 @@ Ground truth for SYN-A, SYN-B and SYN-C remained sealed at termination.
 No final astrophysical classification was issued.
 
 PB-0009 is retained as a commissioning record and architecture-correction milestone rather than a completed validation run.
+
+
+# PB-0010 — Project Mugshot
+## Pixel-Complete Blind Synthetic Gauntlet
+
+**Status:** COMPLETE  
+**Mode:** SYNTHETIC_BLIND  
+**Outcome:** 3 / 3 physical scenarios correctly classified blind  
+**Ground truth:** Revealed only after all three verdicts were locked
+
+---
+
+## Objective
+
+PB-0010 ("Project Mugshot") was designed as a demanding end-to-end validation of the Planet Hunting Bros vetting architecture before progression toward live candidate work.
+
+The test asked a simple but important question:
+
+> Can the pipeline distinguish a genuine on-target transit-like planet signal from an on-target eclipsing binary and an off-target contaminating eclipsing source, without access to the physical truth during vetting?
+
+This was not intended simply to test transit detection.
+
+The principal objective was **physical-source discrimination** using light-curve behaviour, aperture behaviour, neighbouring-source information and pixel-level localisation.
+
+---
+
+## Blind experimental design
+
+Three synthetic candidates were generated:
+
+- `SYN-A`
+- `SYN-B`
+- `SYN-C`
+
+Exactly one example of each physical scenario was generated:
+
+- `ON_TARGET_PLANET`
+- `ON_TARGET_ECLIPSING_BINARY`
+- `OFF_TARGET_ECLIPSING_CONTAMINANT`
+
+The assignment of these scenarios to SYN-A/B/C was randomised.
+
+Each candidate contained only the science-visible evidence required by the gauntlet, including:
+
+- light curve
+- supplied ephemeris
+- multiple photometric apertures
+- nearby-source catalogue
+- 9 × 9 pixel cube
+- target and neighbouring-source positions
+
+The physical-class records were stored separately from the public candidate evidence.
+
+A sealed truth accessor was created at generation time. It explicitly refused to reveal the truth until the verdicts for **all three candidates** had been locked.
+
+The ordinary private-truth dictionary and scenario-assignment object were then removed from the normal runtime namespace.
+
+This was therefore a genuine blind classification exercise rather than retrospective labelling.
+
+---
+
+## Gate architecture
+
+The blind candidates were evaluated through the PB-0010 gate sequence.
+
+### G01–G02
+Basic candidate/data integrity and light-curve quality.
+
+### G03
+Synthetic-mode dummy placeholder.
+
+No catalogue or external astrophysical information was introduced and G03 contributed **zero scientific evidence** to the classification.
+
+### G04
+Event repeatability / individual-event consistency.
+
+### G05
+Odd/even event consistency.
+
+### G06
+Period / alias sanity.
+
+### G07
+Independent odd/even consistency discriminator.
+
+### G08
+Secondary-eclipse search.
+
+### G09
+Aperture dependence.
+
+### G10
+Nearby-source / contamination-risk assessment.
+
+### G11
+Dilution feasibility.
+
+Tests whether a neighbouring source is physically capable of producing the observed depth if it were eclipsed.
+
+Importantly, physical capability alone does **not** establish that the neighbour is the source.
+
+### G12
+Difference-image / centroid localisation.
+
+Tests where the disappearing light is spatially located.
+
+### G13
+Transit-correlated photocentre motion.
+
+Independent spatial diagnostic testing whether the image photocentre moves systematically during the event.
+
+### G14
+Blind evidence synthesis and verdict lock.
+
+G14 introduced no new astrophysical evidence.
+
+It synthesised only the previously frozen gate outputs and locked one of:
+
+- `PLANET_LIKE`
+- `EB_LIKE`
+- `CONTAMINANT_LIKE`
+- `AMBIGUOUS`
+
+Only after all three G14 verdicts were locked was ground truth permitted to be revealed.
+
+---
+
+# Results
+
+| Candidate | Locked blind classification | Confidence | Revealed physical class | Result |
+|---|---|---|---|---|
+| SYN-A | `EB_LIKE` | HIGH | `ON_TARGET_ECLIPSING_BINARY` | CORRECT |
+| SYN-B | `CONTAMINANT_LIKE` | HIGH | `OFF_TARGET_ECLIPSING_CONTAMINANT` | CORRECT |
+| SYN-C | `PLANET_LIKE` | MODERATE | `ON_TARGET_PLANET` | CORRECT |
+
+## Final score: 3 / 3
+
+---
+
+# Candidate notes
+
+## SYN-A
+
+**Locked verdict:** `EB_LIKE / HIGH`
+
+SYN-A provided the on-target eclipsing-binary test case.
+
+The candidate survived the basic transit-quality stages but accumulated sufficient eclipsing-binary-like evidence for the blind synthesis to classify it as `EB_LIKE`.
+
+The verdict was locked before any physical-class information was consulted.
+
+Following the final reveal, SYN-A was confirmed as:
+
+`ON_TARGET_ECLIPSING_BINARY`
+
+**Blind classification: CORRECT**
+
+---
+
+## SYN-B
+
+**Locked verdict:** `CONTAMINANT_LIKE / HIGH`
+
+SYN-B became the principal off-target contamination stress test.
+
+Final recorded gate pattern:
+
+- G01: PASS
+- G02: PASS
+- G04: PASS
+- G05: PASS
+- G06: PASS
+- G07: PASS
+- G08: PASS
+- G09: FAIL
+- G10: PASS
+- G11: FAIL
+- G12: FAIL
+- G13: CAUTION
+
+Total:
+
+- 8 PASS
+- 1 CAUTION
+- 3 FAIL
+
+The decisive evidence came from spatial localisation.
+
+G12 found:
+
+- localisation: `N1`
+- target offset: **1.323 pixels**
+
+The disappearing light therefore localised to a known off-target source rather than the nominal target.
+
+G13 independently measured a **4.25 sigma** transit-correlated centroid shift, adding further contamination evidence.
+
+G14 consequently locked:
+
+`CONTAMINANT_LIKE / HIGH`
+
+Following the final reveal, SYN-B was confirmed as:
+
+`OFF_TARGET_ECLIPSING_CONTAMINANT`
+
+**Blind classification: CORRECT**
+
+This was an important result because several earlier light-curve gates passed. The pipeline did not mistake a transit-shaped signal for a planet once pixel-level source localisation was considered.
+
+---
+
+## SYN-C
+
+**Locked verdict:** `PLANET_LIKE / MODERATE`
+
+SYN-C was arguably the most informative of the three tests because it was **not artificially perfect**.
+
+Early/transit-shape testing was exceptionally clean:
+
+- G01: PASS
+- G02: PASS
+- G04: PASS
+- G05: PASS
+- G06: PASS
+- G07: PASS
+- G08: PASS
+
+G04 recovered four usable repeating events with:
+
+- median depth: **1481.4 ppm**
+- relative depth MAD: **0.288**
+- downward-event fraction: **1.000**
+
+No strong odd/even, alias or secondary-eclipse evidence emerged.
+
+However, contamination testing deliberately complicated the interpretation.
+
+### G09 — CAUTION
+
+The signal showed sufficient aperture dependence to trigger contamination scrutiny.
+
+### G10 — PASS
+
+Two nearby sources existed, but neither met the frozen G10 contamination-risk thresholds:
+
+- nearby sources: 2
+- caution sources: 0
+- severe sources: 0
+
+### G11 — FAIL
+
+Both neighbours were bright enough that a physically possible stellar eclipse could, in principle, reproduce the observed diluted depth.
+
+- physically capable neighbours: 2
+- strongly capable neighbours: 2
+
+At this stage contamination could not simply be dismissed.
+
+### G12 — PASS / TARGET
+
+The difference-image localisation then provided the critical spatial evidence.
+
+Measured position of disappearing light:
+
+- target position: `(4.000, 4.000)` pix
+- difference centroid: `(3.908, 4.066)` pix
+- target offset: **0.113 pix**
+- target offset: **2.37 arcsec**
+
+Distances from difference centroid:
+
+- TARGET: **0.113 pix**
+- N1: **1.551 pix**
+- N2: **3.147 pix**
+
+Closest object: `TARGET`
+
+Therefore:
+
+`G12 LOCATION: TARGET`
+
+This strongly contradicted the hypothesis that either theoretically capable neighbour was actually producing the signal.
+
+### G13 — PASS
+
+The independent photocentre-motion test was exceptionally quiet:
+
+- total centroid shift: **0.0005 pix**
+- angular shift: **0.01 arcsec**
+- shift significance: **0.27 sigma**
+
+There was therefore no persuasive transit-correlated photocentre motion.
+
+G12 and G13 independently supported an on-target origin.
+
+### G14 synthesis
+
+With:
+
+- a repeating transit-like signal,
+- no strong EB discriminator,
+- secure on-target localisation,
+- and negligible centroid motion,
+
+the frozen G14 hierarchy locked:
+
+`PLANET_LIKE / MODERATE`
+
+The moderate rather than high confidence appropriately retained the caution arising from aperture dependence and theoretical dilution feasibility.
+
+Following the final reveal, SYN-C was confirmed as:
+
+`ON_TARGET_PLANET`
+
+**Blind classification: CORRECT**
+
+This was probably the strongest validation produced by PB-0010: the pipeline did not simply count PASS/FAIL gates. It correctly allowed stronger localisation evidence to resolve apparently conflicting contamination indicators.
+
+---
+
+# Runtime / protocol difficulties
+
+PB-0010 was operationally difficult.
+
+During the run there were several notebook/runtime continuity problems, including lost runtime state and some incompatibilities between earlier gate-record schemas.
+
+These required recovery and compatibility cells.
+
+Important safeguards were maintained during those repairs:
+
+1. Ground truth remained sealed.
+2. Candidate evidence was not regenerated after inspection.
+3. Frozen scientific thresholds were not changed to accommodate results.
+4. Previously locked verdicts were restored only from their already-public blind records.
+5. Compatibility repairs changed record handling, not astrophysical measurements.
+6. No physical-class information was used to alter a blind verdict.
+7. The final truth reveal remained prohibited until all three candidate verdicts were locked.
+
+These difficulties made PB-0010 substantially messier than intended, but they also tested an important real-world property of the workflow: the ability to recover from interrupted analysis without contaminating a blind experiment.
+
+---
+
+# Scientific interpretation
+
+PB-0010 achieved its primary objective.
+
+The gauntlet correctly distinguished:
+
+- an on-target eclipsing binary,
+- an off-target eclipsing contaminant,
+- and an on-target planet signal.
+
+### Key lesson 1 — Transit shape alone is insufficient
+
+SYN-B passed many of the early photometric tests.
+
+Its rejection required source-localisation information.
+
+### Key lesson 2 — Dilution feasibility is not localisation
+
+SYN-C failed G11 because neighbouring stars were theoretically capable of producing the observed depth.
+
+However, G12 and G13 demonstrated that the observed disappearing light was associated with the target.
+
+A neighbour being capable of producing a signal does not mean that it did.
+
+### Key lesson 3 — Pixel evidence is critical
+
+G12 was decisive in separating SYN-B and SYN-C:
+
+- SYN-B → lost light localised off target
+- SYN-C → lost light localised on target
+
+This validates the decision to make pixel-level diagnostics a core component of the vetting pipeline.
+
+### Key lesson 4 — Evidence hierarchy matters more than gate counting
+
+SYN-C contained both CAUTION and FAIL results yet was correctly classified as planet-like.
+
+The final classification therefore cannot be reduced to a simple number of passed gates.
+
+Different diagnostics answer different physical questions and must be interpreted accordingly.
+
+---
+
+# PB-0010 verdict
+
+**PROJECT MUGSHOT: PASS**
+
+Three distinct physical scenarios were generated blind.
+
+Three verdicts were locked blind.
+
+Ground truth was then revealed.
+
+**3 / 3 classifications were correct.**
+
+PB-0010 therefore provides the first complete pixel-level blind validation that the current Planet Hunting Bros candidate-vetting architecture can distinguish the principal synthetic classes it was designed to separate.
+
+This does **not** demonstrate that the pipeline will classify every real TESS candidate correctly.
+
+Real observations will contain additional systematics, stellar behaviour, catalogue incompleteness and astrophysical configurations not represented by these three synthetic cases.
+
+PB-0010 should therefore be treated as a successful validation milestone, not as proof of universal classifier accuracy.
+
+---
+
+## Next action
+
+Preserve the PB-0010 gate definitions and frozen thresholds as the validated baseline.
+
+Do not retrospectively optimise PB-0010 against its now-known truth labels.
+
+Future improvements should be tested prospectively in new blind runs rather than by modifying PB-0010 until it performs better.
+
+**Believe — but test it blind.** 🪐
