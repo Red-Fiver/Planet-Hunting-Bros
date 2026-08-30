@@ -2381,3 +2381,565 @@ Do not retrospectively optimise PB-0010 against its now-known truth labels.
 Future improvements should be tested prospectively in new blind runs rather than by modifying PB-0010 until it performs better.
 
 **Believe — but test it blind.** 🪐
+
+## PB-0011 — Changing Gear
+
+**Mode:** Synthetic blind automated validation  
+**Protocol:** G01–G14  
+**Candidates:** 5  
+**Blind score:** 3 / 5  
+**Retrospective tuning:** None
+
+### Aim
+
+PB-0011 was the first Planet Hunting Bros experiment designed to move from manually shepherding individual synthetic candidates through the vetting process to a fully automated blind G01–G14 pipeline.
+
+Five synthetic candidates were generated and frozen before testing. Their ground-truth classes were sealed until all five blind verdicts had been completed and locked.
+
+The candidate population contained one example from each of five scenario families:
+
+- Clean on-target planet
+- On-target eclipsing binary
+- Off-target eclipsing contaminant
+- Planet with contamination context
+- Deceptive on-target eclipsing binary
+
+The primary objective was therefore both operational and scientific: determine whether the complete vetting architecture could run automatically while retaining meaningful discrimination between planet-like, eclipsing-binary-like and contaminant-like signals.
+
+### Blind results
+
+| Candidate | Blind verdict | Confidence | Ground truth | Result |
+|---|---|---|---|---|
+| SYN-A | EB_LIKE | MODERATE | On-target eclipsing binary | Correct |
+| SYN-B | CONTAMINANT_LIKE | HIGH | Off-target eclipsing contaminant | Correct |
+| SYN-C | EB_LIKE | MODERATE | On-target planet | Incorrect |
+| SYN-D | PLANET_LIKE | MODERATE | On-target planet | Correct |
+| SYN-E | PLANET_LIKE | MODERATE | On-target eclipsing binary | Incorrect |
+
+**Official blind score: 3 / 5**
+
+Although the overall predicted population happened to contain the correct numbers of planet-like, EB-like and contaminant-like classifications, two individual candidates were exchanged between the planet-like and EB-like classes. Population-level agreement was therefore not treated as successful candidate-level classification.
+
+### Operational result
+
+PB-0011 successfully demonstrated that the G01–G14 architecture could be executed as an automated blind pipeline.
+
+The run also introduced substantially stronger persistence and recovery architecture following the operational difficulties encountered during PB-0010.
+
+All five candidates could be processed automatically, their evidence retained, their verdicts locked before truth reveal, and the blind protocol maintained.
+
+This was considered a major operational success despite the 3/5 scientific score.
+
+### Scientific interpretation
+
+PB-0011 demonstrated that successful automation did not imply that the scientific decision logic was sufficiently mature.
+
+The two incorrect classifications were retained as genuine blind failures. No thresholds or decision rules were retrospectively altered to improve the PB-0011 score.
+
+Instead, the failures became evidence for subsequent validation work.
+
+This distinction was important:
+
+**PB-0011 was allowed to fail.**
+
+The purpose of blind validation was not to obtain a perfect score, but to expose weaknesses that would otherwise remain hidden.
+
+### Outcome
+
+PB-0011 established that:
+
+- the complete G01–G14 workflow could operate automatically;
+- candidate evidence and blind verdicts could survive the automated workflow;
+- ground truth could remain sealed until verdict lock;
+- the detector could distinguish clear off-target contamination strongly;
+- planet-like versus on-target EB discrimination remained imperfect.
+
+The official PB-0011 result remains permanently recorded as **3 / 5**.
+
+It was not repaired after truth reveal.
+
+### Next action
+
+Run a larger fresh blind population without retrospectively modifying PB-0011.
+
+Increase the sample from five to ten candidates to determine whether the observed classification weaknesses persist and to provide a better basis for diagnosing failure modes.
+
+**Believe — but let the detector fail honestly. 🪐**
+
+## PB-0012 — Ten Little Synthetics
+
+**Mode:** Synthetic blind automated validation  
+**Protocol:** G01–G14  
+**Candidates:** 10  
+**Blind score:** 8 / 10  
+**Retrospective tuning:** None
+
+### Aim
+
+PB-0012 was designed as a larger fresh blind test following the 3/5 result of PB-0011.
+
+The objective was not to repair or rescore PB-0011. Instead, ten entirely fresh synthetic candidates were generated and frozen before testing using the existing scientific decision logic.
+
+The population contained two examples from each of five scenario families:
+
+- Clean on-target planet
+- On-target eclipsing binary
+- Off-target eclipsing contaminant
+- Planet with contamination context
+- Deceptive on-target eclipsing binary
+
+Candidate identities were randomised and ground truth remained sealed until all blind verdicts had been completed and locked.
+
+Engineering and persistence architecture could be improved following PB-0011, but the scientific classifier was not retrospectively tuned against the PB-0011 answers.
+
+### Result
+
+The automated G01–G14 pipeline correctly classified eight of the ten fresh blind candidates.
+
+**Official blind score: 8 / 10**
+
+The two incorrect classifications were retained as genuine failures.
+
+No thresholds were subsequently adjusted to convert PB-0012 into a higher-scoring run.
+
+### Immediate autopsy
+
+Unlike retrospective tuning, a post-reveal autopsy was performed to determine whether the two failures shared an identifiable physical or logical mechanism.
+
+The principal finding concerned the relationship between:
+
+- **G12 — Difference Image Localisation**
+- **G13 — Transit-Correlated Centroid Motion**
+
+The existing synthesis logic could treat a G13 failure too strongly as evidence for an off-target contaminating source.
+
+However, G12 and G13 do not provide equivalent information.
+
+G12 attempts to localise the source of the event directly using the difference image.
+
+G13 asks whether the measured centroid changes in correlation with the event.
+
+The PB-0012 failures demonstrated that these diagnostics can disagree.
+
+Most importantly:
+
+**G12 PASS + G13 FAIL should not automatically imply that the event originates off target.**
+
+If the difference image positively localises the event to the target, a transit-correlated centroid anomaly is evidence of a localisation conflict requiring caution — not, by itself, proof that a neighbouring source produced the event.
+
+### Scientific interpretation
+
+PB-0012 therefore identified a specific prospective hypothesis rather than simply suggesting that the detector needed to become more permissive.
+
+The proposed interpretation was:
+
+> A lone G13 FAIL should not establish off-target contamination when G12 positively localises the event to the target.
+
+This was considered physically preferable to changing numerical thresholds simply to recover the two failed candidates.
+
+No PB-0012 verdict was altered after this finding.
+
+The official score remains permanently **8 / 10**.
+
+### Importance
+
+PB-0012 represented a substantial improvement over PB-0011:
+
+**PB-0011: 3 / 5**  
+**PB-0012: 8 / 10**
+
+More importantly, the larger blind population exposed a specific weakness in the evidence-synthesis architecture that could be expressed as a testable scientific hypothesis.
+
+The appropriate next step was therefore not to modify PB-0012 until it achieved 10/10.
+
+Instead, the proposed rule change would be frozen prospectively and tested against an entirely new blind population.
+
+### Next action
+
+Create PB-0013 as a fresh ten-candidate blind experiment.
+
+Make exactly one prospective scientific change:
+
+**G12 PASS + G13 FAIL = LOCALISATION CONFLICT**
+
+and:
+
+**G13 FAIL alone is not sufficient evidence to establish OFF-TARGET contamination.**
+
+Freeze this rule before generating the PB-0013 candidates.
+
+Make no other scientific changes.
+
+Then test whether the revised interpretation generalises to fresh unseen synthetic evidence.
+
+**Believe — but change the rule before seeing the answers. 🪐**
+
+## PB-0013 — Localisation Conflict
+
+**Mode:** Synthetic blind automated validation  
+**Protocol:** G01–G14  
+**Candidates:** 10  
+**Parent experiment:** PB-0012  
+**Parent result:** 8 / 10  
+**Blind score:** 10 / 10  
+**Retrospective tuning:** None  
+**Status:** Closed
+
+### Aim
+
+PB-0013 was designed as a prospective test of a single scientific hypothesis identified during the post-reveal autopsy of PB-0012.
+
+PB-0012 had achieved 8/10 on ten fresh blind synthetic candidates.
+
+Analysis of its failures identified a specific weakness in the interpretation of two localisation diagnostics:
+
+- **G12 — Difference Image Localisation**
+- **G13 — Transit-Correlated Centroid Motion**
+
+The hypothesis for PB-0013 was:
+
+> A lone G13 FAIL should not establish off-target contamination when G12 positively localises the event to the target.
+
+PB-0013 therefore changed exactly one element of the scientific synthesis logic.
+
+### Prospective rule change
+
+Before any PB-0013 candidates were generated, the following rule was frozen:
+
+**G12 PASS + G13 FAIL = LOCALISATION CONFLICT**
+
+and:
+
+**G13 FAIL alone is not sufficient evidence to establish OFF-TARGET contamination.**
+
+A G12 failure could continue to provide genuine evidence for an off-target source.
+
+No other scientific decision rule was intentionally changed from the PB-0012 baseline.
+
+The purpose of PB-0013 was therefore not general detector optimisation.
+
+It was a direct prospective test of one specific hypothesis using completely fresh blind evidence.
+
+### Blind architecture
+
+Ten fresh synthetic candidates were generated only after the scientific protocol had been frozen.
+
+The population contained two examples from each of five scenario families:
+
+- Clean on-target planet
+- On-target eclipsing binary
+- Off-target eclipsing contaminant
+- Planet with contamination context
+- Deceptive on-target eclipsing binary
+
+Candidate identities were randomised.
+
+Ground truth was sealed.
+
+Candidate evidence was frozen and fingerprinted before testing.
+
+The complete G01–G14 pipeline was then run automatically.
+
+All ten verdicts were locked before ground truth was revealed.
+
+Immutable candidate records and a final pre-reveal snapshot were preserved before opening the truth vault.
+
+### Locked blind verdicts
+
+| Candidate | Blind verdict | Confidence | Localisation note |
+|---|---|---|---|
+| SYN-A | EB_LIKE | MODERATE | Localisation conflict |
+| SYN-B | PLANET_LIKE | MODERATE | — |
+| SYN-C | PLANET_LIKE | MODERATE | Localisation conflict |
+| SYN-D | EB_LIKE | MODERATE | Localisation conflict |
+| SYN-E | CONTAMINANT_LIKE | HIGH | — |
+| SYN-F | CONTAMINANT_LIKE | HIGH | — |
+| SYN-G | PLANET_LIKE | MODERATE | Localisation conflict |
+| SYN-H | EB_LIKE | MODERATE | Localisation conflict |
+| SYN-I | PLANET_LIKE | MODERATE | — |
+| SYN-J | EB_LIKE | MODERATE | Localisation conflict |
+
+### Ground-truth reveal
+
+After all ten blind verdicts had been locked, the sealed ground truth was revealed.
+
+| Candidate | Blind verdict | Ground truth | Result |
+|---|---|---|---|
+| SYN-A | EB_LIKE | On-target eclipsing binary | Correct |
+| SYN-B | PLANET_LIKE | On-target planet | Correct |
+| SYN-C | PLANET_LIKE | On-target planet | Correct |
+| SYN-D | EB_LIKE | On-target eclipsing binary | Correct |
+| SYN-E | CONTAMINANT_LIKE | Off-target eclipsing contaminant | Correct |
+| SYN-F | CONTAMINANT_LIKE | Off-target eclipsing contaminant | Correct |
+| SYN-G | PLANET_LIKE | On-target planet | Correct |
+| SYN-H | EB_LIKE | On-target eclipsing binary | Correct |
+| SYN-I | PLANET_LIKE | On-target planet | Correct |
+| SYN-J | EB_LIKE | On-target eclipsing binary | Correct |
+
+## Official blind score: 10 / 10
+
+Class-level performance:
+
+- **On-target planets: 4 / 4**
+- **On-target eclipsing binaries: 4 / 4**
+- **Off-target eclipsing contaminants: 2 / 2**
+
+No verdict was changed after truth reveal.
+
+No threshold was altered.
+
+No candidate was rerun to obtain a more favourable classification.
+
+**Retrospective tuning: NONE**
+
+### Scientific interpretation
+
+PB-0013 provides strong prospective support for the localisation hypothesis generated by PB-0012.
+
+The important result is not simply that the score increased from 8/10 to 10/10.
+
+The experimental sequence was:
+
+**PB-0011: 3 / 5**
+
+↓
+
+**PB-0012: 8 / 10**
+
+↓
+
+PB-0012 post-reveal autopsy identifies a specific localisation failure mode.
+
+↓
+
+One scientific change is defined prospectively.
+
+↓
+
+The revised rule is frozen before new candidates exist.
+
+↓
+
+Ten fresh blind candidates are generated.
+
+↓
+
+All verdicts are locked before truth reveal.
+
+↓
+
+**PB-0013: 10 / 10**
+
+This distinction is critical.
+
+PB-0013 was not tuned until the existing PB-0012 failures disappeared.
+
+The PB-0012 score remains 8/10.
+
+Instead, those failures generated a hypothesis which was subsequently tested against new unseen evidence.
+
+### What PB-0013 establishes
+
+Within the synthetic population tested, PB-0013 demonstrates that the revised localisation interpretation can successfully distinguish:
+
+- planet-like on-target events;
+- on-target eclipsing binaries;
+- off-target eclipsing contaminants;
+- planet signals occurring in contamination-risk environments;
+- deceptive eclipsing-binary configurations.
+
+It also demonstrates that a G13 centroid-motion failure can coexist with an event that is nevertheless correctly localised to the target by G12.
+
+Treating this combination as a **localisation conflict**, rather than automatically as proof of contamination, successfully preserved the correct physical classification in this blind test.
+
+### What PB-0013 does NOT establish
+
+A 10/10 result on ten synthetic candidates does not demonstrate universal classifier accuracy.
+
+The synthetic generator remains an approximation of reality.
+
+Real TESS observations contain additional complications including:
+
+- spacecraft systematics;
+- quality-flagged cadences;
+- stellar variability;
+- imperfect apertures;
+- crowded fields;
+- real PSF behaviour;
+- sector-dependent observing conditions;
+- catalogue incompleteness;
+- astrophysical configurations not represented by the synthetic generator.
+
+PB-0013 should therefore be treated as a successful synthetic validation milestone, not as proof that the detector will classify every real TESS candidate correctly.
+
+### Experimental record
+
+The run was closed with:
+
+- Scientific protocol frozen before candidate generation: **YES**
+- Candidate evidence frozen before testing: **YES**
+- Ground truth sealed during testing: **YES**
+- All blind verdicts locked before reveal: **YES**
+- Immutable pre-reveal records preserved: **YES**
+- Retrospective tuning: **NONE**
+- Official score: **10 / 10**
+- Run closed: **YES**
+
+Immutable post-reveal record:
+
+`PB0013_POST_REVEAL_FINAL_IMMUTABLE.json`
+
+Final record SHA256:
+
+`d0bb1c901777fc890fe5150e1d6456a903e693b25ab5ac93743131fe9ee58970`
+
+### Next action
+
+Do not attempt to preserve the 10/10 score by constructing increasingly artificial synthetic edge cases and tuning the detector against them.
+
+The next major validation step should expose the frozen detector architecture to **known real TESS observations**.
+
+Use a prospectively selected blind sample containing known planets, eclipsing binaries and contaminating systems.
+
+The objective should be to identify the detector's real-world limitations — not to force it to classify every difficult outlier correctly.
+
+Synthetic validation remains the controlled laboratory.
+
+**Reality becomes the proving ground.**
+
+**PB-0013 final result: 10 / 10.**
+
+**Believe — but test it blind. ✋️*✋️ 🪐**
+## PB-0014 — Known-Real TESS Validation
+
+**Mode:** Known-real blind validation  
+**Targets:** 12  
+**Data source:** TESS / MAST  
+**Status:** Acquisition complete — scientific testing not started
+
+### Aim
+
+PB-0014 marks the transition from controlled synthetic validation to known real TESS observations.
+
+Following the successful synthetic validation sequence culminating in PB-0013, the next objective is to determine how the existing vetting architecture behaves when exposed to the complications present in genuine TESS data.
+
+The purpose is not to tune the detector until it correctly handles every difficult known target.
+
+Instead, PB-0014 is intended to identify where the synthetic-validated architecture succeeds, where it fails, and which assumptions do not survive contact with real observations.
+
+The known astrophysical classifications of the targets are to remain hidden from the detector-testing process until blind classifications have been produced and locked.
+
+### Target roster
+
+Twelve known-real TESS targets were selected and frozen before any flux or pixel data were inspected.
+
+| Blind ID | Target | Selected product |
+|---|---|---|
+| REAL-A | TOI 1455 | SPOC Sector 17 |
+| REAL-B | TOI 1846 | SPOC Sector 17 |
+| REAL-C | TOI 1423 | SPOC Sector 16 |
+| REAL-D | TOI 585 | SPOC Sector 9 |
+| REAL-E | TOI 1842 | SPOC Sector 23 |
+| REAL-F | TOI 5478 | SPOC Sector 60 |
+| REAL-G | TOI 1619 | SPOC Sector 57 |
+| REAL-H | TOI 813 | SPOC Sector 4 |
+| REAL-I | TOI 2331 | SPOC Sector 105 |
+| REAL-J | TOI 1186 | SPOC Sector 24 |
+| REAL-K | TOI 1062 | SPOC Sector 1 |
+| REAL-L | TOI 1521 | SPOC Sector 58 |
+
+The acquisition selection was frozen before download.
+
+Selection SHA256:
+
+`9ccbb61bcca0b8349ec3e290abc7f5069a7ff027fc0bf90c89a07811f130a004`
+
+### Acquisition reconnaissance
+
+MAST reconnaissance confirmed that TESS products were available for all twelve frozen targets.
+
+**Targets with available TESS products: 12 / 12**
+
+Reconnaissance was query-only.
+
+No files were downloaded and no scientific evidence was inspected during this stage.
+
+### Raw evidence acquisition
+
+For each of the twelve targets, two forms of raw evidence were acquired:
+
+- one frozen SPOC light-curve FITS product;
+- the corresponding target-pixel FITS product.
+
+This produced a raw evidence bank containing:
+
+- **12 / 12 light curves**
+- **12 / 12 target-pixel files**
+- **24 / 24 total raw FITS files**
+
+All files were persisted to Google Drive.
+
+SHA256 fingerprints were calculated and subsequently re-verified against the persisted files.
+
+**Final raw-file verification: 24 / 24 PASS**
+
+One target-pixel product generated a TESS quality-mask warning indicating that approximately 24% of its cadences would be ignored under the Lightkurve quality mask.
+
+This was retained as an authentic property of the real data rather than treated as an acquisition failure.
+
+The file itself downloaded successfully and passed integrity verification.
+
+### Blind-state preservation
+
+At the end of the acquisition session:
+
+- Target roster frozen: **YES**
+- Acquisition selection frozen: **YES**
+- Light curves acquired: **12 / 12**
+- Target-pixel files acquired: **12 / 12**
+- Raw files hash verified: **24 / 24**
+- Flux inspected: **NO**
+- Pixel evidence inspected: **NO**
+- Preprocessing started: **NO**
+- Detector testing started: **NO**
+- Ground truth revealed: **NO**
+
+The acquisition session was then formally closed.
+
+A recovery checkpoint and acquisition manifest were persisted to Google Drive so that a future runtime can reconstruct and verify the frozen evidence bank without re-querying or re-downloading the observations.
+
+### Scientific boundary
+
+No PB-0014 scientific result exists at this stage.
+
+The successful acquisition of the data should not be interpreted as detector validation.
+
+No light curve has yet been judged.
+
+No pixel evidence has yet been interpreted.
+
+No candidate has yet received a blind physical classification.
+
+This separation is deliberate.
+
+The raw real-world evidence has been acquired and frozen **before the analysis rules are applied to it**.
+
+### Next action
+
+Begin the next PB-0014 session with recovery and integrity verification.
+
+Before inspecting the twelve targets, define and freeze the preprocessing and real-data handling rules required to translate the PB-0013 synthetic architecture to genuine TESS observations.
+
+Then process the known-real targets blind.
+
+The purpose of PB-0014 is not to obtain 12/12 at any cost.
+
+A failure against a known real target is scientifically useful if it reveals a genuine limitation of the pipeline.
+
+Any limitations identified should be recorded before considering prospective changes in a subsequent experiment.
+
+**Synthetic validation is complete.**
+
+**PB-0014 begins the conversation with reality.**
+
+**Believe — but let reality answer back. ✋️*✋️ 🪐**
