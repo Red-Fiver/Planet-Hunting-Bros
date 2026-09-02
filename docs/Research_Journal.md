@@ -2943,3 +2943,245 @@ Any limitations identified should be recorded before considering prospective cha
 **PB-0014 begins the conversation with reality.**
 
 **Believe — but let reality answer back. ✋️*✋️ 🪐**
+
+---
+
+## PB-0014 — Scientific Validation Result and Closure
+
+**Status:** CLOSED  
+**Protocol:** PB0014-v1.0  
+**Parent detector:** PB-0013  
+**Validation domain:** Known-real TESS
+
+### Scientific testing
+
+Following acquisition and recovery of the frozen 12-target evidence bank, PB-0014 proceeded into its first blind test against genuine TESS observations.
+
+Before target inspection, the real-TESS preprocessing protocol was frozen.
+
+The principal choices were:
+
+- PDCSAP_FLUX as the primary light curve;
+- SAP_FLUX retained as an audit stream;
+- Lightkurve TESS default quality mask;
+- median normalisation;
+- no sigma clipping;
+- no new generic detrending;
+- no gap interpolation;
+- no candidate-specific repair;
+- AMBIGUOUS explicitly permitted as a valid detector outcome.
+
+Known classifications and catalogue ephemerides remained forbidden.
+
+The preprocessing engine was then frozen and applied uniformly to all twelve targets. The resulting preprocessed evidence bank was persisted and fingerprinted before detector testing began.
+
+### Blind event search
+
+A frozen Box Least Squares search was then applied independently to all twelve light curves.
+
+The search used:
+
+- period range: 0.5–13.0 days;
+- fixed duration grid;
+- likelihood objective;
+- global maximum BLS power;
+- no catalogue periods;
+- no known classifications;
+- no candidate-specific adjustment;
+- no retrospective tuning.
+
+A blind event ephemeris was successfully locked for all **12 / 12** targets.
+
+These ephemerides became the sole timing input to the subsequent G01–G14 vetting process.
+
+### Real-TESS G01–G14 adapter
+
+The PB-0013 scientific architecture was ported prospectively to the real-TESS evidence.
+
+The PB-0013 thresholds and final evidence-synthesis policy were retained.
+
+Real-data adaptations were frozen before execution.
+
+In particular:
+
+- G09 used uniform concentric apertures derived from the target-pixel data;
+- G12/G13 operated on the frozen TESS target-pixel cubes;
+- G10/G11 remained INFO-only because no external neighbour catalogue had been prospectively incorporated into PB-0014;
+- the PB-0013 localisation principle was retained;
+- no target-specific adjustment was permitted.
+
+The adapter was frozen before any target entered G01–G14.
+
+### Locked blind classifications
+
+All twelve targets were processed before ground truth was revealed.
+
+| Candidate | Blind verdict | Confidence |
+|---|---|---|
+| REAL-A | CONTAMINANT_LIKE | MODERATE |
+| REAL-B | AMBIGUOUS | LOW |
+| REAL-C | CONTAMINANT_LIKE | HIGH |
+| REAL-D | EB_LIKE | HIGH |
+| REAL-E | AMBIGUOUS | LOW |
+| REAL-F | AMBIGUOUS | LOW |
+| REAL-G | PLANET_LIKE | MODERATE |
+| REAL-H | PLANET_LIKE | MODERATE |
+| REAL-I | CONTAMINANT_LIKE | MODERATE |
+| REAL-J | AMBIGUOUS | LOW |
+| REAL-K | PLANET_LIKE | MODERATE |
+| REAL-L | EB_LIKE | MODERATE |
+
+The complete blind result was persisted before truth reveal.
+
+**Pre-reveal content SHA256:**
+
+`6ad13b0b8552e6f9a0be405e1d606a07be8f5e5d2a2ef23f1b64af943a6b7015`
+
+### Ground-truth reveal
+
+After all verdicts were locked, the known-real answer key was constructed from the authoritative preselected sources and compared with the blind classifications.
+
+REAL-F was designated **UNSCORABLE — MIXED TRUTH** because the frozen roster specified the TOI 5478 system rather than an individual signal, while different signals within that system have different false-positive origins.
+
+This left **11 scorable targets**.
+
+### Official blind classification result
+
+- Scorable targets: **11 / 12**
+- Exact classes correct: **5 / 11 — 45.5%**
+- Abstentions: **3 / 11 — 27.3%**
+- Committed classifications: **8 / 11**
+- Correct committed classifications: **5 / 8 — 62.5%**
+- Wrong committed classifications: **3**
+- Unscorable targets: **1 — REAL-F**
+
+PB-0014 therefore demonstrated that the 10/10 synthetic performance achieved in PB-0013 did **not** transfer directly to real-TESS physical classification.
+
+That result is retained without alteration.
+
+### Post-reveal period-recovery diagnostic
+
+After truth reveal, a separate diagnostic compared the independently detected BLS periods with the known astrophysical periods.
+
+Using a post-reveal diagnostic convention recognising direct, half-period and double-period matches:
+
+**9 / 12 known periods were recovered directly or through a recognised harmonic alias.**
+
+This is **not part of the official prospective blind score**, because the period-match convention was defined after truth reveal.
+
+It nevertheless provides an important diagnostic result.
+
+In many cases the blind search successfully detected the real astrophysical clock, but the downstream vetting/classification architecture interpreted the event incorrectly or abstained.
+
+Several direct period recoveries were extremely close to the reference periods.
+
+PB-0014 therefore exposed an important distinction:
+
+**finding the periodic signal and correctly determining its physical origin are separate problems.**
+
+REAL-H provided the opposite warning. It received the correct PLANET_LIKE classification despite the blind BLS search not recovering the known planet period. TOI-813 b lies outside the frozen 0.5–13 day BLS search range.
+
+A correct class therefore does not necessarily imply successful end-to-end recovery of the known astrophysical object.
+
+### Principal lessons
+
+PB-0014 provided the first direct evidence of which assumptions from the synthetic programme survive contact with genuine TESS observations.
+
+#### 1. Event detection is promising, but incomplete
+
+The 9/12 post-reveal period-recovery diagnostic indicates that the blind search frequently identified the genuine periodic structure.
+
+However, a single global BLS maximum and a 0.5–13 day search range are insufficient for a general discovery pipeline.
+
+Future development must explicitly address longer periods, competing peaks and harmonic aliases.
+
+#### 2. Real-TESS physical classification is not yet reliable enough
+
+The official exact-class result of 5/11 demonstrates that synthetic validation alone was insufficient to establish real-world performance.
+
+The largest development opportunity now lies downstream of basic periodic-signal detection.
+
+#### 3. Real localisation requires dedicated validation
+
+G12/G13 were originally developed and validated against controlled synthetic pixel data.
+
+Their first-generation real-TESS adapters cannot simply be assumed to possess equivalent reliability.
+
+Real localisation must now be tested as its own subsystem.
+
+#### 4. Neighbour information must be incorporated prospectively
+
+G10/G11 were INFO-only in PB-0014 because no external neighbour catalogue had been introduced before the blind run.
+
+A future real-data architecture should prospectively incorporate an appropriate Gaia/TIC-based neighbour model before validation.
+
+#### 5. Several synthetic-era gates require real-data validation
+
+The behaviour of G04, G05, G07, G08 and G09 against genuine TESS observations requires dedicated investigation.
+
+Any resulting scientific changes must be defined prospectively and tested under a new PB run identifier.
+
+#### 6. AMBIGUOUS remains valuable
+
+Three scorable targets received an AMBIGUOUS verdict.
+
+This reduced coverage, but prevented the detector from being forced to make a physical claim where its own evidence rules did not support one.
+
+The ability to abstain should therefore be retained.
+
+### Scientific integrity
+
+PB-0014 was not repaired after seeing the answer key.
+
+After truth reveal:
+
+- detector rerun: **NO**
+- locked verdicts modified: **NO**
+- retrospective tuning: **NO**
+- PB-0014 rescored after proposed improvements: **NO**
+
+The disappointing classification result is preserved as part of the permanent experimental record.
+
+Future improvements cannot alter PB-0014.
+
+They must be tested prospectively in PB-0015 or a later experiment.
+
+### Immutable records
+
+**Pre-reveal content SHA256:**
+
+`6ad13b0b8552e6f9a0be405e1d606a07be8f5e5d2a2ef23f1b64af943a6b7015`
+
+**Truth-reveal content SHA256:**
+
+`a00a18c285176592841268b59e6aad13db81e8265c97cb1f6ca83d869a8bc09c`
+
+**Final closure content SHA256:**
+
+`cbba936eb760dc51A2952fa227f35fc4632412cdccb54d21756aa15c8455ecc2`
+
+### Conclusion
+
+PB-0014 was the first occasion on which the Planet Hunting Bros detector was forced to confront the complexity of the real TESS sky.
+
+The result was substantially weaker than its synthetic predecessor.
+
+That is precisely why PB-0014 was necessary.
+
+The run demonstrated that the blind search can frequently recover genuine astrophysical periodicity while exposing substantial weaknesses in downstream localisation, vetting and physical classification.
+
+PB-0014 therefore changes the development question from:
+
+**“Can the detector solve our synthetic tests?”**
+
+to:
+
+**“Which parts of the detector actually survive the real sky?”**
+
+That question will drive the next phase of development.
+
+**PB-0014 CLOSED.**
+
+**No score repair. No hidden tuning. No moving the goalposts.**
+
+**Reality answered back. Now we learn from it. ✋️*✋️ 🪐**
